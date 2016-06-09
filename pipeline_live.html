@@ -1,0 +1,82 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <title>IRC R&D pipeline</title>
+
+  <style>
+    body, html {
+      font-family: arial, sans-serif;
+      font-size: 11pt;
+    }
+
+    #visualization {
+      box-sizing: border-box;
+      width: 100%;
+    }
+    
+    .vis-item.openwheel  { background-color: #B0E2FF; }
+    .vis-item.rally      { background-color: #EAEAEA; }
+    .vis-item.motorcycle { background-color: #FA8072; }
+    .vis-item.touringcar { background-color: #B4EEB4; }
+    .vis-item.endurance  { background-color: #FFFFCC; }
+  </style>
+
+  <script src="vis.js"></script>
+  <link href="vis.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="headerinfo">
+    <img src="irc-logo-color-222.jpg" class="logo">
+  <span class="jazzy">The Air-Bel Center at the International Rescue Committee</span>
+  <p>
+    This dashboard shows R&D work currently in the pipeline.
+  </p>
+</div>
+<div id="visualization"></div>
+
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+  <script src="vis.js"></script>
+  <link href="vis.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="visualization"></div>
+
+<div id="loading">
+  <div class="loader"><span>L</span><span>o</span><span>a</span><span>d</span><span>i</span><span>n</span><span>g</span>
+</div>
+</div>
+<script type="text/javascript">
+  // load data via an ajax request. When the data is in, load the timeline
+  $.ajax({
+    url: 'https://sheetsu.com/apis/v1.0/a14bf6eaca8f/sheets/Data',
+    success: function (data) {
+      // hide the "loading..." message
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('headerinfo').style.display = 'inline-block';
+
+      // DOM element where the Timeline will be attached
+      var container = document.getElementById('visualization');
+
+      // Create a DataSet (allows two way data-binding)
+      var items = new vis.DataSet(data);
+
+      // Configuration for the Timeline
+      var options = {};
+
+      // Create a Timeline
+      var timeline = new vis.Timeline(container, items, options);
+    },
+    error: function (err) {
+      console.log('Error', err);
+      if (err.status === 0) {
+        alert('Failed to load the database.\nPlease run this example on a server.');
+      }
+      else {
+        alert('Failed to load the database.');
+      }
+    }
+  });
+</script>
+</body>
+</html>
